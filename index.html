@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitație Nuntă</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      background-color: #fff8f0;
+      color: #4b3f3f;
+      text-align: center;
+    }
+    header {
+      padding: 2rem;
+      background-color: #f5e3dc;
+    }
+    header h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+    }
+    .image-section img {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin-top: 1rem;
+    }
+    .countdown {
+      font-size: 1.5rem;
+      margin: 2rem 0;
+    }
+    form {
+      background: #fff;
+      padding: 2rem;
+      margin: 2rem auto;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    form input, form textarea, form button {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    form button {
+      background-color: #d8a48f;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    footer {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #f5e3dc;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>George &amp; Valentina</h1>
+    <p>Vă invităm cu drag la nunta noastră!</p>
+  </header>
+
+  <section class="image-section">
+    <img src="poza_mama_george.png" alt="Cuplu fericit">
+  </section>
+
+  <div class="countdown">
+    <p>Mai sunt <span id="timer"></span> până la marele eveniment!</p>
+  </div>
+
+  <form id="rsvp-form">
+    <input type="text" name="name" placeholder="Numele tău" required>
+    <input type="number" name="guests" placeholder="Număr persoane" required>
+    <textarea name="message" placeholder="Detalii opționale (ex: alergii, urări...)" rows="4"></textarea>
+    <button type="submit">Trimite confirmarea</button>
+  </form>
+
+  <footer>
+    <p>Vă așteptăm cu drag pe 12 iulie 2025!</p>
+  </footer>
+
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    // Countdown
+    const eventDate = new Date("2025-07-12T00:00:00").getTime();
+    const timerEl = document.getElementById("timer");
+    setInterval(() => {
+      const now = new Date().getTime();
+      const diff = eventDate - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      timerEl.textContent = `${days} zile, ${hours} ore și ${minutes} minute`;
+    }, 1000);
+
+    // EmailJS init
+    emailjs.init("LmKB9mt4uQS-Ny0cY"); // <- înlocuiește cu cheia ta publică
+
+    document.getElementById("rsvp-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      emailjs.sendForm("service_28q0tqg", "template_8egaskh", this)
+        .then(() => {
+          alert("Mulțumim pentru confirmare!");
+          this.reset();
+        }, (error) => {
+          alert("Eroare la trimitere: " + error.text);
+        });
+    });
+  </script>
+</body>
+</html>
