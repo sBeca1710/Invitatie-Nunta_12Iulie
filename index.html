@@ -6,11 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
       height: 100%;
@@ -58,7 +54,7 @@
 
     .text-overlay h1 {
       margin-bottom: 20px;
-      font-size: 2em;
+      font-size: 1.8em;
     }
 
     .form-section form {
@@ -94,23 +90,67 @@
       width: 100%;
       display: flex;
       justify-content: space-between;
-      padding: 0 20px;
+      padding: 0 10px;
       transform: translateY(-50%);
-      z-index: 3;
+      z-index: 4;
     }
 
     .controls button {
       background: rgba(255, 255, 255, 0.7);
       border: none;
-      font-size: 2rem;
-      padding: 10px 20px;
+      font-size: 1.2rem;
+      padding: 6px 12px;
       cursor: pointer;
-      border-radius: 10px;
+      border-radius: 8px;
       transition: background 0.3s;
     }
 
     .controls button:hover {
       background: rgba(255, 255, 255, 1);
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: float 6s linear infinite;
+      opacity: 0.6;
+    }
+
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(45deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    audio {
+      display: none;
     }
   </style>
 </head>
@@ -121,7 +161,7 @@
     <div class="slide" style="background-image: url('Colaj_nunta_3.png');"></div>
     <div class="slide" style="background: #fef6f2;">
       <div class="text-overlay">
-        <h1>Vei fi alături de noi în această zi specială?</h1>
+        <h1>Va fi o zi de poveste – ești și tu parte din ea?</h1>
         <div class="form-section">
           <form id="rsvp-form">
             <input type="text" name="name" placeholder="Numele tău" required>
@@ -139,6 +179,12 @@
     </div>
   </div>
 
+  <!-- Muzică -->
+  <audio id="background-music" autoplay loop>
+    <source src="muzica.mp3" type="audio/mpeg">
+    Browserul tău nu suportă audio.
+  </audio>
+
   <script>
     emailjs.init("LmKB9mt4uQS-Ny0cY");
 
@@ -155,7 +201,7 @@
 
     const slides = document.querySelectorAll('.slide');
     let current = 0;
-    let interval = setInterval(nextSlide, 5000);
+    let interval = setInterval(() => nextSlide(false), 5000);
 
     function showSlide(index, isManual = false) {
       slides.forEach(slide => {
@@ -195,6 +241,18 @@
       prevSlide();
       clearInterval(interval);
     });
+
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }, 500);
+
+    // Setează volumul audio la 50% (0.5)
+    const audio = document.getElementById('background-music');
+    audio.volume = 0.5;
   </script>
 </body>
 </html>
