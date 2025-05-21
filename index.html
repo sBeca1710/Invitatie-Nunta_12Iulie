@@ -29,10 +29,24 @@
       background-repeat: no-repeat;
       background-position: center;
       opacity: 0;
-      transition: opacity 1s ease-in-out;
+      transition: opacity 1.5s ease-in-out;
+      z-index: 1;
     }
 
-    
+    /* Fade vizual doar pe stânga și dreapta, simulare cu gradient */
+    .slide:not(.no-fade)::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(to right, 
+        rgba(254, 246, 242, 1) 0%, 
+        rgba(254, 246, 242, 0) 10%, 
+        rgba(254, 246, 242, 0) 90%, 
+        rgba(254, 246, 242, 1) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
 
     .slide.manual-transition {
       transition: opacity 0.5s ease-in-out !important;
@@ -40,9 +54,8 @@
 
     .slide.active {
       opacity: 1;
-      z-index: 2;
+      z-index: 3;
     }
-    
 
     .text-overlay {
       position: absolute;
@@ -53,6 +66,7 @@
       color: #333;
       max-width: 500px;
       padding: 20px;
+      z-index: 4;
     }
 
     .text-overlay h1 {
@@ -97,7 +111,7 @@
       justify-content: space-between;
       padding: 0 10px;
       transform: translateY(-50%);
-      z-index: 4;
+      z-index: 5;
     }
 
     .controls button {
@@ -164,7 +178,8 @@
     <div class="slide active" style="background-image: url('Colaj_nunta_1.png');"></div>
     <div class="slide" style="background-image: url('Colaj_nunta_2.png');"></div>
     <div class="slide" style="background-image: url('Colaj_nunta_3.png');"></div>
-    <div class="slide" style="background: #fef6f2;">
+
+    <div class="slide no-fade" style="background: #fef6f2;">
       <div class="text-overlay">
         <h1>Va fi o zi de poveste – ești și tu parte din ea?</h1>
         <div class="form-section">
@@ -255,7 +270,7 @@
       setTimeout(() => heart.remove(), 7000);
     }, 500);
 
-    // Setează volumul audio la 50% (0.5)
+    // Muzică la 50% volum
     const audio = document.getElementById('background-music');
     audio.volume = 0.5;
   </script>
