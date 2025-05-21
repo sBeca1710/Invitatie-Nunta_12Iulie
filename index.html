@@ -2,106 +2,145 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitație Nuntă</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: 'Open Sans', sans-serif;
-      background-color: #fff8f0;
-      color: #4b3f3f;
-      text-align: center;
+      padding: 0;
+      box-sizing: border-box;
     }
-    header {
-      padding: 2rem;
-      background-color: #f5e3dc;
-    }
-    header h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 3rem;
-    }
-    .image-section img {
-      width: 100%;
-      max-width: 600px;
-      border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      margin-top: 1rem;
-    }
-    .countdown {
-      font-size: 1.5rem;
-      margin: 2rem 0;
-    }
-    form {
+
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
       background: #fff;
-      padding: 2rem;
-      margin: 2rem auto;
-      max-width: 500px;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    form input, form textarea, form button {
+
+    .slideshow {
+      position: relative;
       width: 100%;
-      margin: 0.5rem 0;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 10px;
+      height: 100vh;
     }
-    form button {
-      background-color: #d8a48f;
+
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .slide.manual-transition {
+      transition: opacity 0.5s ease-in-out !important;
+    }
+
+    .slide.active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .text-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #333;
+      max-width: 500px;
+      padding: 20px;
+    }
+
+    .text-overlay h1 {
+      margin-bottom: 20px;
+      font-size: 2em;
+    }
+
+    .form-section form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .form-section input,
+    .form-section textarea,
+    .form-section button {
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    .form-section button {
+      background-color: #ff7f50;
       color: white;
       border: none;
       cursor: pointer;
+      transition: background 0.3s;
     }
-    footer {
-      margin-top: 2rem;
-      padding: 1rem;
-      background-color: #f5e3dc;
+
+    .form-section button:hover {
+      background-color: #e96b3d;
+    }
+
+    .controls {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      transform: translateY(-50%);
+      z-index: 3;
+    }
+
+    .controls button {
+      background: rgba(255, 255, 255, 0.7);
+      border: none;
+      font-size: 2rem;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+
+    .controls button:hover {
+      background: rgba(255, 255, 255, 1);
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>George &amp; Valentina</h1>
-    <p>Vă invităm cu drag la nunta noastră!</p>
-  </header>
+  <div class="slideshow">
+    <div class="slide active" style="background-image: url('Colaj_nunta_1.png');"></div>
+    <div class="slide" style="background-image: url('Colaj_nunta_2.png');"></div>
+    <div class="slide" style="background-image: url('Colaj_nunta_3.png');"></div>
+    <div class="slide" style="background: #fef6f2;">
+      <div class="text-overlay">
+        <h1>Vei fi alături de noi în această zi specială?</h1>
+        <div class="form-section">
+          <form id="rsvp-form">
+            <input type="text" name="name" placeholder="Numele tău" required>
+            <input type="number" name="guests" placeholder="Număr persoane" required>
+            <textarea name="message" placeholder="Detalii opționale (ex: alergii, urări...)" rows="4"></textarea>
+            <button type="submit">Trimite confirmarea</button>
+          </form>
+        </div>
+      </div>
+    </div>
 
-  <section class="image-section">
-    <img src="poza_mama_george.png" alt="Cuplu fericit">
-  </section>
-
-  <div class="countdown">
-    <p>Mai sunt <span id="timer"></span> până la marele eveniment!</p>
+    <div class="controls">
+      <button id="prev">&#10094;</button>
+      <button id="next">&#10095;</button>
+    </div>
   </div>
 
-  <form id="rsvp-form">
-    <input type="text" name="name" placeholder="Numele tău" required>
-    <input type="number" name="guests" placeholder="Număr persoane" required>
-    <textarea name="message" placeholder="Detalii opționale (ex: alergii, urări...)" rows="4"></textarea>
-    <button type="submit">Trimite confirmarea</button>
-  </form>
-
-  <footer>
-    <p>Vă așteptăm cu drag pe 12 iulie 2025!</p>
-  </footer>
-
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script>
-    // Countdown
-    const eventDate = new Date("2025-07-12T00:00:00").getTime();
-    const timerEl = document.getElementById("timer");
-    setInterval(() => {
-      const now = new Date().getTime();
-      const diff = eventDate - now;
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      timerEl.textContent = `${days} zile, ${hours} ore și ${minutes} minute`;
-    }, 1000);
-
-    // EmailJS init
-    emailjs.init("LmKB9mt4uQS-Ny0cY"); // <- înlocuiește cu cheia ta publică
+    emailjs.init("LmKB9mt4uQS-Ny0cY");
 
     document.getElementById("rsvp-form").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -112,6 +151,49 @@
         }, (error) => {
           alert("Eroare la trimitere: " + error.text);
         });
+    });
+
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+    let interval = setInterval(nextSlide, 5000);
+
+    function showSlide(index, isManual = false) {
+      slides.forEach(slide => {
+        slide.classList.remove('active', 'manual-transition');
+      });
+
+      if (isManual) {
+        slides[index].classList.add('manual-transition');
+      }
+
+      slides[index].classList.add('active');
+    }
+
+    function nextSlide(isManual = false) {
+      if (current < slides.length - 1) {
+        current++;
+        showSlide(current, isManual);
+        if (current === slides.length - 1) {
+          clearInterval(interval);
+        }
+      }
+    }
+
+    function prevSlide() {
+      if (current > 0) {
+        current--;
+        showSlide(current, true);
+      }
+    }
+
+    document.getElementById('next').addEventListener('click', () => {
+      nextSlide(true);
+      clearInterval(interval);
+    });
+
+    document.getElementById('prev').addEventListener('click', () => {
+      prevSlide();
+      clearInterval(interval);
     });
   </script>
 </body>
